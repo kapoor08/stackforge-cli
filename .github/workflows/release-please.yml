@@ -7,20 +7,13 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - id: release
-        uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v4
         with:
           config-file: .release-please-config.json
           manifest-file: .release-please-manifest.json
-      - name: Enable auto-merge for release PR
-        if: ${{ steps.release.outputs.prs_created == 'true' || steps.release.outputs.prs_created == '1' }}
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          pull-request-number: ${{ fromJSON(steps.release.outputs.pr).number }}
-          merge-method: squash
+          skip-github-pull-request: true
