@@ -1,0 +1,27 @@
+name: Test StackForge
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [18, 20]
+        packageManager: [npm, pnpm, yarn, bun]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install -g pnpm
+        if: matrix.packageManager == 'pnpm'
+      - run: npm install -g yarn
+        if: matrix.packageManager == 'yarn'
+      - run: npm install -g bun
+        if: matrix.packageManager == 'bun'
+      - run: ${{ matrix.packageManager }} install
+      - run: ${{ matrix.packageManager }} run test:smoke

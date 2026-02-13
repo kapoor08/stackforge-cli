@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-binaries:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: node18-linux-x64
+          - os: windows-latest
+            target: node18-win-x64
+          - os: macos-latest
+            target: node18-macos-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install -g pnpm
+      - run: pnpm install
+      - run: pnpm build
+      - name: Build binary
+        run: pkg . --targets ${{ matrix.target }} --output dist/stackforge
+      - name: Package binary (unix)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p dist/packages
+          for file in dist/stackforge*; do
+            if [ -f "$file" ]; then
+              base=$(basename "$file")
+              zip -j "dist/packages/${base}.zip" "$file"
+            fi
+          done
+          (cd dist/packages && sha256sum *.zip > checksums.txt)
+      - name: Package binary (windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist\\packages | Out-Null
+          Get-ChildItem dist -Filter "stackforge*" | ForEach-Object {
+            $zip = "dist\\packages\\$($_.Name).zip"
+            Compress-Archive -Path $_.FullName -DestinationPath $zip -Force
+          }
+          Get-ChildItem dist\\packages -Filter "*.zip" | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower()
+            "$hash  $($_.Name)" | Out-File -Append -FilePath dist\\packages\\checksums.txt -Encoding ascii
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stackforge-${{ matrix.target }}
+          path: dist/packages/*
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build-binaries
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+      - run: npm install -g pnpm
+      - run: pnpm install
+      - run: pnpm test:smoke
+      - run: pnpm build
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist/packages
+          pattern: stackforge-*
+          merge-multiple: true
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/packages/*
+          generate_release_notes: true

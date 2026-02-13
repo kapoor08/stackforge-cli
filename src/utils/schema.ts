@@ -1,0 +1,1 @@
+export const STACKFORGE_SCHEMA_VERSION = 1;

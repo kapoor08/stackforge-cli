@@ -1,0 +1,65 @@
+{
+  "name": "create-stackforge",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "create-stackforge": "./bin/cli.js",
+    "stackforge": "./bin/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "tsup src/cli.ts --format esm --sourcemap --clean",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build:bin": "pnpm exec pkg . --targets node18-win-x64,node18-macos-x64,node18-linux-x64 --output dist/stackforge",
+    "test:smoke": "tsx scripts/smoke.ts",
+    "test:registry": "tsx scripts/registry-test.ts",
+    "test:add-remove": "tsx scripts/add-remove-test.ts",
+    "test:update": "tsx scripts/update-test.ts",
+    "test:list": "tsx scripts/list-test.ts",
+    "test:list-features": "tsx scripts/list-features-test.ts",
+    "test:doctor": "tsx scripts/doctor-test.ts",
+    "test:agents": "tsx scripts/agents-test.ts",
+    "test:agent-add-remove": "tsx scripts/agent-add-remove-test.ts",
+    "test:list-agents": "tsx scripts/list-agents-test.ts",
+    "test:readme": "tsx scripts/readme-test.ts",
+    "test:deps": "tsx scripts/deps-test.ts",
+    "test:create-agents": "tsx scripts/create-agents-test.ts",
+    "test:create": "tsx scripts/create-test.ts",
+    "test:create-features": "tsx scripts/create-features-test.ts",
+    "test:create-preset-features": "tsx scripts/create-preset-features-test.ts",
+    "test:versions": "tsx scripts/versions-test.ts",
+    "test:agent-tools": "tsx scripts/agent-tools-test.ts",
+    "test:agent-hints": "tsx scripts/agent-hints-test.ts",
+    "test:migrate": "tsx scripts/migrate-test.ts",
+    "test:auto-migrate": "tsx scripts/auto-migrate-test.ts",
+    "test:list-presets": "tsx scripts/list-presets-test.ts",
+    "test:list-presets-details": "tsx scripts/list-presets-details-test.ts",
+    "test:feature-email": "tsx scripts/feature-email-test.ts",
+    "test:feature-storage": "tsx scripts/feature-storage-test.ts",
+    "test:feature-payments": "tsx scripts/feature-payments-test.ts",
+    "test:feature-clients": "tsx scripts/feature-clients-test.ts",
+    "test:docs": "tsx scripts/docs-test.ts",
+    "test:unit": "node --test --import tsx tests/unit/**/*.test.ts",
+    "test:integration": "node --test --import tsx tests/integration/**/*.test.ts",
+    "test:e2e": "node --test --import tsx tests/e2e/**/*.test.ts",
+    "test:all": "node --test --import tsx tests/**/*.test.ts",
+    "clean:tests": "tsx scripts/clean-test-artifacts.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "inquirer": "^9.2.20"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "eslint": "^8.57.0",
+    "pkg": "^5.8.1",
+    "tsup": "^8.2.3",
+    "tsx": "^4.16.5",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
