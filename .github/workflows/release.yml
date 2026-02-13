@@ -26,7 +26,7 @@ jobs:
       - run: pnpm install
       - run: pnpm build
       - name: Build binary
-        run: pkg . --targets ${{ matrix.target }} --output dist/stackforge
+        run: pnpm exec pkg . --targets ${{ matrix.target }} --output dist/stackforge
       - name: Package binary (unix)
         if: runner.os != 'Windows'
         run: |
