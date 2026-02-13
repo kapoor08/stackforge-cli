@@ -7,10 +7,15 @@
     "create-stackforge": "./bin/cli.js",
     "stackforge": "./bin/cli.js"
   },
+  "files": [
+    "dist",
+    "bin",
+    "templates"
+  ],
   "scripts": {
     "dev": "tsx src/cli.ts",
     "build": "tsup src/cli.ts --format esm --sourcemap --clean",
-    "release": "pnpm build && pnpm publish --access public",
+    "release": "pnpm build && changeset publish",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "lint": "eslint .",
