@@ -1,37 +1,37 @@
 # StackForge
 
-Developer setup for the StackForge CLI.
+StackForge is a full-stack app generator. It scaffolds a project based on your selected frontend, API, database/ORM, auth, UI library, and features, plus AI tool integrations.
 
-## Quick Start
-
-```bash
-pnpm install
-pnpm dev
-```
-
-## Smoke Test
+## Install and Create
 
 ```bash
-pnpm test:smoke
+npx create-stackforge my-app
 ```
 
-## Add/Remove Test
+Or if installed globally:
 
 ```bash
-pnpm test:add-remove
+stackforge create my-app
 ```
 
-## List/Doctor/Agents Tests
+## Common Create Examples
 
 ```bash
-pnpm test:list
-pnpm test:doctor
-pnpm test:agents
-pnpm test:agent-add-remove
-pnpm test:deps
+stackforge create my-app --yes
+stackforge create my-app --preset saas --yes
+stackforge create my-app --features email,storage,payments --yes
+stackforge create my-app --ai-agents claude,codex,gemini,cursor --yes
+stackforge create my-app --out-dir ./apps --yes
 ```
 
-## Add/Remove Usage
+## Presets
+
+```bash
+stackforge list-presets
+stackforge list-presets --details
+```
+
+## Add/Remove Features
 
 ```bash
 stackforge add ui:tailwind
@@ -47,57 +47,79 @@ stackforge remove auth:nextauth
 stackforge remove api:trpc
 ```
 
-## Agents Usage
+## Update, Validate, Fix, Doctor
 
 ```bash
-stackforge configure-agents --agents claude,copilot
-stackforge add-agent claude
-stackforge remove-agent copilot
-stackforge list-agents
+stackforge update
+stackforge update --check
+stackforge update --live --major
+stackforge validate
+stackforge fix
+stackforge doctor
+stackforge doctor --fix
 ```
 
-## AI Agent Files
-
-- `.ai-agents/<agent>/context.json` - project stack summary + feature hints
-- `.ai-agents/<agent>/tools.json` - enabled tools derived from selected features
-
-## Create Usage
+## Package Manager
 
 ```bash
-stackforge create my-app --yes
-stackforge create my-app --no-prompts
-stackforge create my-app --ai-agents claude,copilot --yes
-stackforge create my-app --features email,storage --yes
-stackforge create my-app --out-dir ./apps --yes
+stackforge use npm
+stackforge use pnpm
+stackforge use yarn --no-install
 ```
 
-During interactive create, you can select extra features (email/storage/payments).
-
-## Presets
-
-```bash
-stackforge list-presets
-stackforge list-presets --details
-```
-
-Presets include feature defaults (e.g., saas -> email + payments).
-
-## Migrate Usage
+## Migrations and Upgrade
 
 ```bash
 stackforge migrate
 stackforge migrate --dry-run
+stackforge upgrade --preset saas
 ```
 
-## Schema Notes
+## AI Agent Integrations
 
-- `stackforge.json` is auto-migrated on read if schema version changes.
+```bash
+stackforge configure-agents --agents claude,codex,gemini,cursor
+stackforge add-agent claude
+stackforge remove-agent codex
+stackforge list-agents
+```
 
-## Notes
+Generated AI outputs:
 
-- `create` scaffolds a project using the selected frontend, API, auth, DB, UI, and features.
-- Generated projects include `.gitignore`, `.editorconfig`, and `.env.example`.
+- `.ai-agents/<agent>/context.json`
+- `.ai-agents/<agent>/tools.json`
+- `.ai-agents/servers/<agent>/`
+- `.claude/claude_desktop_config.json` (Claude)
+- `.codex/functions.json` (Codex)
+- `.cursor/extensions.json` and `.cursorrules` (Cursor)
+- `.windsurf/cascade.json` (Windsurf)
+- `.tabnine/config.json` (Tabnine)
+
+## Project Notes
+
+- `stackforge.json` is auto-migrated on read when schema versions change.
+- Generated apps include `.gitignore`, `.editorconfig`, and `.env.example`.
 - Feature docs: `docs/FEATURE_EMAIL.md`, `docs/FEATURE_STORAGE.md`, `docs/FEATURE_PAYMENTS.md`.
 - Docs: `docs/API.md`, `docs/AI_AGENTS.md`, `docs/CONTRIBUTING.md`, `docs/TROUBLESHOOTING.md`.
 - Extra docs: `docs/PRESETS.md`, `docs/MIGRATIONS.md`, `docs/COMPATIBILITY.md`.
 - Release guide: `RELEASE.md`.
+
+## CLI Development
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Tests
+
+```bash
+pnpm test:smoke
+pnpm test:add-remove
+pnpm test:list
+pnpm test:doctor
+pnpm test:agents
+pnpm test:agent-add-remove
+pnpm test:deps
+pnpm test:all
+```
