@@ -1,5 +1,11 @@
 # create-stackforge
 
+## 0.1.3
+
+### Patch Changes
+
+- CLI package update
+
 ## 0.1.2
 
 ### Patch Changes
