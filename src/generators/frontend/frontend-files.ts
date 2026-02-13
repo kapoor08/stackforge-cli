@@ -1,10 +1,10 @@
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { StackforgeConfig } from '../../types/config.js';
 import { ensureDir, readTextFile, writeTextFile } from '../../utils/file-system.js';
 import type { GeneratorContext } from '../context.js';
 import { applyTemplate } from '../templates/template-engine.js';
 import { appendEnvLine } from '../../utils/env-file.js';
+import { TEMPLATES_DIR } from '../../utils/templates-dir.js';
 
 export async function generateFrontendFiles(
   root: string,
@@ -12,7 +12,7 @@ export async function generateFrontendFiles(
   ctx?: GeneratorContext
 ): Promise<void> {
   const projectRoot = join(root, config.projectName);
-  const templatesRoot = fileURLToPath(new URL('../../../templates', import.meta.url));
+  const templatesRoot = TEMPLATES_DIR;
 
   if (config.frontend.type === 'nextjs') {
     const appDir = join(projectRoot, 'app');

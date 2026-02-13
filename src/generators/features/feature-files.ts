@@ -3,7 +3,7 @@ import type { StackforgeConfig } from '../../types/config.js';
 import { ensureDir, readTextFile, writeTextFile } from '../../utils/file-system.js';
 import type { GeneratorContext } from '../context.js';
 import { appendEnvLine } from '../../utils/env-file.js';
-import { fileURLToPath } from 'node:url';
+import { TEMPLATES_DIR } from '../../utils/templates-dir.js';
 
 export async function generateFeatureFiles(
   root: string,
@@ -11,7 +11,7 @@ export async function generateFeatureFiles(
   ctx?: GeneratorContext
 ): Promise<void> {
   const projectRoot = join(root, config.projectName);
-  const templatesRoot = fileURLToPath(new URL('../../../templates', import.meta.url));
+  const templatesRoot = TEMPLATES_DIR;
   const libDir = join(projectRoot, 'src', 'lib');
   const isTs = config.frontend.language === 'ts';
 

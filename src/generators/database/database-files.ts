@@ -1,9 +1,9 @@
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { StackforgeConfig } from '../../types/config.js';
 import { ensureDir, writeTextFile, readTextFile } from '../../utils/file-system.js';
 import { appendEnvLine } from '../../utils/env-file.js';
 import type { GeneratorContext } from '../context.js';
+import { TEMPLATES_DIR } from '../../utils/templates-dir.js';
 
 export async function generateDatabaseFiles(
   root: string,
@@ -12,7 +12,7 @@ export async function generateDatabaseFiles(
 ): Promise<void> {
   const projectRoot = join(root, config.projectName);
 
-  const templatesRoot = fileURLToPath(new URL('../../../templates', import.meta.url));
+  const templatesRoot = TEMPLATES_DIR;
 
   if (config.database.provider !== 'none') {
     const envPath = join(projectRoot, '.env.example');

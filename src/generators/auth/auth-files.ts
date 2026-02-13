@@ -1,9 +1,9 @@
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { StackforgeConfig } from '../../types/config.js';
 import { appendEnvLine } from '../../utils/env-file.js';
 import { writeTextFile, ensureDir, readTextFile } from '../../utils/file-system.js';
 import type { GeneratorContext } from '../context.js';
+import { TEMPLATES_DIR } from '../../utils/templates-dir.js';
 
 export async function generateAuthFiles(
   root: string,
@@ -12,7 +12,7 @@ export async function generateAuthFiles(
 ): Promise<void> {
   const projectRoot = join(root, config.projectName);
 
-  const templatesRoot = fileURLToPath(new URL('../../../templates', import.meta.url));
+  const templatesRoot = TEMPLATES_DIR;
 
   if (config.auth.provider === 'nextauth') {
     await appendEnvLine(join(projectRoot, '.env.example'), 'NEXTAUTH_SECRET=""', ctx);
