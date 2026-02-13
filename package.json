@@ -1,6 +1,46 @@
 {
   "name": "create-stackforge",
   "version": "0.0.1",
+  "description": "The universal full-stack boilerplate generator. Scaffold production-ready apps with Next.js/Vite, 8 UI libraries, 6 databases, 4 ORMs, 3 auth providers, REST/tRPC/GraphQL, and AI agent integrations.",
+  "license": "MIT",
+  "author": "Lakshay Kapoor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kapoor08/stackforge-cli.git"
+  },
+  "homepage": "https://github.com/kapoor08/stackforge-cli#readme",
+  "bugs": {
+    "url": "https://github.com/kapoor08/stackforge-cli/issues"
+  },
+  "keywords": [
+    "boilerplate",
+    "generator",
+    "scaffold",
+    "nextjs",
+    "vite",
+    "react",
+    "typescript",
+    "tailwind",
+    "shadcn",
+    "prisma",
+    "drizzle",
+    "trpc",
+    "graphql",
+    "rest",
+    "nextauth",
+    "clerk",
+    "supabase",
+    "postgres",
+    "mysql",
+    "sqlite",
+    "stripe",
+    "ai-agents",
+    "mcp",
+    "full-stack",
+    "cli",
+    "create-app",
+    "stackforge"
+  ],
   "private": false,
   "type": "module",
   "bin": {
