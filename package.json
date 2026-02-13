@@ -1,7 +1,7 @@
 {
   "name": "create-stackforge",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "bin": {
     "create-stackforge": "./bin/cli.js",
