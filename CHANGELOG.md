@@ -1,5 +1,11 @@
 # create-stackforge
 
+## 0.1.1
+
+### Patch Changes
+
+- Fixed the issue of the default command not working.
+
 ## 0.1.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "create-stackforge",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The universal full-stack boilerplate generator. Scaffold production-ready apps with Next.js/Vite, 8 UI libraries, 6 databases, 4 ORMs, 3 auth providers, REST/tRPC/GraphQL, and AI agent integrations.",
   "license": "MIT",
   "author": "Lakshay Kapoor",
@@ -93,7 +93,10 @@
     "test:integration": "node --test --import tsx tests/integration/**/*.test.ts",
     "test:e2e": "node --test --import tsx tests/e2e/**/*.test.ts",
     "test:all": "node --test --import tsx tests/**/*.test.ts",
-    "clean:tests": "tsx scripts/clean-test-artifacts.ts"
+    "clean:tests": "tsx scripts/clean-test-artifacts.ts",
+    "update:versions": "tsx scripts/update-versions.ts",
+    "update:versions:major": "tsx scripts/update-versions.ts --major",
+    "update:versions:dry": "tsx scripts/update-versions.ts --dry-run"
   },
   "dependencies": {
     "commander": "^12.1.0",

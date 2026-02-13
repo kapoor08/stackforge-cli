@@ -28,7 +28,7 @@ program
   .description('Universal full-stack boilerplate generator')
   .version(version);
 
-program.addCommand(createCommand);
+program.addCommand(createCommand, { isDefault: true });
 program.addCommand(listCommand);
 program.addCommand(addCommand);
 program.addCommand(removeCommand);
