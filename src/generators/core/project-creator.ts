@@ -31,7 +31,7 @@ export async function createProjectSkeleton(
 
   const envExample = `# Environment Variables\n`;
   await writeTextFile(join(projectRoot, '.env.example'), envExample, ctx);
-  const gitignore = await readTextFile(join(templatesRoot, 'shared', '.gitignore'));
+  const gitignore = await readTextFile(join(templatesRoot, 'shared', '_gitignore'));
   await writeTextFile(join(projectRoot, '.gitignore'), gitignore, ctx);
   const editorconfig = await readTextFile(join(templatesRoot, 'shared', '.editorconfig'));
   await writeTextFile(join(projectRoot, '.editorconfig'), editorconfig, ctx);

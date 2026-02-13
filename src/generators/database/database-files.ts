@@ -16,7 +16,11 @@ export async function generateDatabaseFiles(
 
   if (config.database.provider !== 'none') {
     const envPath = join(projectRoot, '.env.example');
-    await appendEnvLine(envPath, 'DATABASE_URL=""', ctx);
+    if (config.database.provider === 'mongodb') {
+      await appendEnvLine(envPath, 'MONGODB_URI=""', ctx);
+    } else {
+      await appendEnvLine(envPath, 'DATABASE_URL=""', ctx);
+    }
     if (config.database.provider === 'neon') {
       await appendEnvLine(envPath, 'NEON_API_KEY=""', ctx);
       await appendEnvLine(envPath, 'NEON_PROJECT_ID=""', ctx);

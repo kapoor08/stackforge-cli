@@ -13,7 +13,7 @@ export function validateCompatibility(config: StackforgeConfig): void {
     throw new Error('tRPC requires TypeScript.');
   }
 
-  if (config.database.orm === 'mongoose') {
+  if (config.database.orm === 'mongoose' && config.database.provider !== 'mongodb') {
     throw new Error('Mongoose requires MongoDB. Use drizzle, prisma, or typeorm with SQL databases.');
   }
 

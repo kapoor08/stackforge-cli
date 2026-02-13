@@ -89,6 +89,10 @@ export function collectDependencies(config: StackforgeConfig): DependencyResult 
     dependencies['better-sqlite3'] = versions.betterSqlite3;
   }
 
+  if (config.database.provider === 'mongodb') {
+    dependencies['mongodb'] = versions.mongodb;
+  }
+
   if (config.database.provider === 'neon') {
     dependencies['@neondatabase/serverless'] = versions.neonServerless;
   }
@@ -122,6 +126,10 @@ export function collectDependencies(config: StackforgeConfig): DependencyResult 
 
   if (config.auth.provider === 'clerk') {
     dependencies['@clerk/nextjs'] = versions.clerkNext;
+  }
+
+  if (config.auth.provider === 'better-auth') {
+    dependencies['better-auth'] = versions.betterAuth;
   }
 
   if (config.auth.provider === 'supabase') {

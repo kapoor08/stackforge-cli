@@ -5,6 +5,51 @@ import { buildConfig } from '../config-builder.js';
 import { defaultConfig } from '../defaults.js';
 import { supported } from '../../utils/supported.js';
 
+const displayNames: Record<string, string> = {
+  // Frontend
+  nextjs: 'Next.js',
+  vite: 'Vite',
+  // UI
+  none: 'None',
+  tailwind: 'Tailwind CSS',
+  shadcn: 'shadcn/ui',
+  mui: 'Material UI',
+  chakra: 'Chakra UI',
+  mantine: 'Mantine',
+  antd: 'Ant Design',
+  nextui: 'NextUI',
+  // Database
+  postgres: 'PostgreSQL',
+  mysql: 'MySQL',
+  sqlite: 'SQLite',
+  mongodb: 'MongoDB',
+  neon: 'Neon',
+  supabase: 'Supabase',
+  // ORM
+  drizzle: 'Drizzle',
+  prisma: 'Prisma',
+  mongoose: 'Mongoose',
+  typeorm: 'TypeORM',
+  // Auth
+  nextauth: 'NextAuth',
+  clerk: 'Clerk',
+  'better-auth': 'Better Auth',
+  // API
+  rest: 'REST',
+  trpc: 'tRPC',
+  graphql: 'GraphQL',
+  // Features
+  email: 'Email (Resend)',
+  storage: 'File Storage (Cloudinary)',
+  payments: 'Payments (Stripe)',
+  analytics: 'Analytics (PostHog)',
+  'error-tracking': 'Error Tracking (Sentry)'
+};
+
+function label(value: string): string {
+  return displayNames[value] || value;
+}
+
 export async function promptForConfig(input: {
   projectName?: string;
   preset?: string;
@@ -45,7 +90,7 @@ export async function promptForConfig(input: {
       type: 'list',
       name: 'frontend',
       message: 'Frontend framework',
-      choices: supported.frontend.map((v) => ({ name: v, value: v }))
+      choices: supported.frontend.map((v) => ({ name: label(v), value: v }))
     },
     {
       type: 'list',
@@ -60,38 +105,38 @@ export async function promptForConfig(input: {
       type: 'list',
       name: 'uiLibrary',
       message: 'UI library',
-      choices: supported.ui.map((v) => ({ name: v, value: v }))
+      choices: supported.ui.map((v) => ({ name: label(v), value: v }))
     },
     {
       type: 'list',
       name: 'databaseProvider',
       message: 'Database provider',
-      choices: supported.database.map((v) => ({ name: v, value: v }))
+      choices: supported.database.map((v) => ({ name: label(v), value: v }))
     },
     {
       type: 'list',
       name: 'orm',
       message: 'ORM',
       when: (ans) => ans.databaseProvider !== 'none',
-      choices: supported.orm.map((v) => ({ name: v, value: v }))
+      choices: supported.orm.map((v) => ({ name: label(v), value: v }))
     },
     {
       type: 'list',
       name: 'authProvider',
       message: 'Authentication',
-      choices: supported.auth.map((v) => ({ name: v, value: v }))
+      choices: supported.auth.map((v) => ({ name: label(v), value: v }))
     },
     {
       type: 'list',
       name: 'apiType',
       message: 'API type',
-      choices: supported.api.map((v) => ({ name: v, value: v }))
+      choices: supported.api.map((v) => ({ name: label(v), value: v }))
     },
     {
       type: 'checkbox',
       name: 'features',
       message: 'Additional features',
-      choices: supported.features.map((v) => ({ name: v, value: v }))
+      choices: supported.features.map((v) => ({ name: label(v), value: v }))
     }
   ]);
 

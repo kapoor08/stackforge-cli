@@ -88,6 +88,43 @@ export async function generateAuthFiles(
     }
   }
 
+  if (config.auth.provider === 'better-auth') {
+    await appendEnvLine(join(projectRoot, '.env.example'), 'BETTER_AUTH_SECRET=""', ctx);
+    await appendEnvLine(join(projectRoot, '.env.example'), 'BETTER_AUTH_URL=""', ctx);
+    const ext = config.frontend.language === 'ts' ? 'ts' : 'js';
+
+    const authDir = join(projectRoot, 'auth');
+    await ensureDir(authDir, ctx);
+    const readme = await readTextFile(join(templatesRoot, 'auth', 'better-auth.README.md'));
+    await writeTextFile(join(authDir, 'README.md'), readme, ctx);
+    const serverConfig = await readTextFile(join(templatesRoot, 'auth', `better-auth-server.${ext}`));
+    await writeTextFile(join(authDir, `auth.${ext}`), serverConfig, ctx);
+
+    const libDir = join(projectRoot, 'src', 'lib');
+    await ensureDir(libDir, ctx);
+    const clientConfig = await readTextFile(join(templatesRoot, 'auth', `better-auth-client.${ext}`));
+    await writeTextFile(join(libDir, `auth-client.${ext}`), clientConfig, ctx);
+
+    if (config.frontend.type === 'nextjs') {
+      const routeDir = join(projectRoot, 'app', 'api', 'auth', '[...all]');
+      await ensureDir(routeDir, ctx);
+      const route = await readTextFile(join(templatesRoot, 'auth', `better-auth-route.${ext}`));
+      await writeTextFile(join(routeDir, `route.${ext}`), route, ctx);
+
+      const protectedDir = join(projectRoot, 'app', 'auth', 'protected');
+      await ensureDir(protectedDir, ctx);
+      const protectedPage = await readTextFile(
+        join(templatesRoot, 'auth', `better-auth-protected-page.${ext}x`)
+      );
+      await writeTextFile(join(protectedDir, `page.${ext}x`), protectedPage, ctx);
+
+      const signInDir = join(projectRoot, 'app', 'auth', 'signin');
+      await ensureDir(signInDir, ctx);
+      const signInPage = await readTextFile(join(templatesRoot, 'auth', `better-auth-signin.${ext}x`));
+      await writeTextFile(join(signInDir, `page.${ext}x`), signInPage, ctx);
+    }
+  }
+
   if (config.auth.provider === 'supabase') {
     await appendEnvLine(join(projectRoot, '.env.example'), 'NEXT_PUBLIC_SUPABASE_URL=""', ctx);
     await appendEnvLine(join(projectRoot, '.env.example'), 'NEXT_PUBLIC_SUPABASE_ANON_KEY=""', ctx);

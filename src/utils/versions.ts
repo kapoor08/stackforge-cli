@@ -52,9 +52,22 @@ export const versions = {
   graphql: '^16.9.0',
   graphqlRequest: '^6.1.0',
   graphqlYoga: '^5.7.0',
+  mongodb: '^6.8.0',
+  betterAuth: '^1.2.0',
   resend: '^3.5.0',
+  sendgrid: '^8.1.0',
+  nodemailer: '^6.9.0',
+  typesNodemailer: '^6.4.0',
+  awsSes: '^3.700.0',
   cloudinary: '^2.0.0',
+  awsS3: '^3.700.0',
+  vercelBlob: '^0.24.0',
   stripe: '^14.0.0',
+  paypal: '^1.0.0',
+  razorpay: '^2.9.0',
   posthog: '^1.165.0',
-  sentryNext: '^8.35.0'
+  reactGa4: '^2.1.0',
+  vercelAnalytics: '^1.3.0',
+  sentryNext: '^8.35.0',
+  logrocket: '^8.1.0'
 } as const;
