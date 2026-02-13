@@ -9,9 +9,8 @@ const displayNames: Record<string, string> = {
   // Frontend
   nextjs: 'Next.js',
   vite: 'Vite',
-  // UI
-  none: 'None',
-  tailwind: 'Tailwind CSS',
+  // Component library
+  none: 'None (Tailwind CSS only)',
   shadcn: 'shadcn/ui',
   mui: 'Material UI',
   chakra: 'Chakra UI',
@@ -104,7 +103,7 @@ export async function promptForConfig(input: {
     {
       type: 'list',
       name: 'uiLibrary',
-      message: 'UI library',
+      message: 'Component library (Tailwind CSS included by default)',
       choices: supported.ui.map((v) => ({ name: label(v), value: v }))
     },
     {

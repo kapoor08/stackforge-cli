@@ -11,7 +11,7 @@ test('runGenerators creates package.json with scripts', async () => {
     projectName: 'app',
     packageManager: 'pnpm',
     frontend: { type: 'vite', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'postgres', orm: 'drizzle' },
     auth: { provider: 'none' },
     api: { type: 'rest' },
@@ -23,5 +23,5 @@ test('runGenerators creates package.json with scripts', async () => {
   const pkgRaw = await readFile(join(root, 'app', 'package.json'), 'utf8');
   const pkg = JSON.parse(pkgRaw);
   assert.ok(pkg.scripts.dev);
-  assert.ok(pkg.scripts['css:build']);
+  assert.ok(pkg.devDependencies['tailwindcss']);
 });

@@ -5,7 +5,7 @@ export type PresetName = 'starter' | 'saas' | 'ecommerce' | 'blog' | 'api';
 const presets: Record<PresetName, Partial<StackforgeConfig>> = {
   starter: {
     frontend: { type: 'nextjs', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'postgres', orm: 'drizzle' },
     auth: { provider: 'none' },
     api: { type: 'trpc' },
@@ -13,7 +13,7 @@ const presets: Record<PresetName, Partial<StackforgeConfig>> = {
   },
   saas: {
     frontend: { type: 'nextjs', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'postgres', orm: 'prisma' },
     auth: { provider: 'nextauth' },
     api: { type: 'trpc' },
@@ -21,7 +21,7 @@ const presets: Record<PresetName, Partial<StackforgeConfig>> = {
   },
   ecommerce: {
     frontend: { type: 'nextjs', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'postgres', orm: 'prisma' },
     auth: { provider: 'none' },
     api: { type: 'rest' },
@@ -29,7 +29,7 @@ const presets: Record<PresetName, Partial<StackforgeConfig>> = {
   },
   blog: {
     frontend: { type: 'nextjs', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'sqlite', orm: 'prisma' },
     auth: { provider: 'none' },
     api: { type: 'rest' },

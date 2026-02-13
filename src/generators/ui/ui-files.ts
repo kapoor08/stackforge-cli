@@ -12,18 +12,19 @@ export async function generateUiFiles(
   const projectRoot = join(root, config.projectName);
   const templatesRoot = TEMPLATES_DIR;
 
-  if (config.ui.library === 'tailwind') {
-    const tailwindTemplate = await readTextFile(join(templatesRoot, 'ui', 'tailwind.config.js'));
-    const postcssTemplate = await readTextFile(join(templatesRoot, 'ui', 'postcss.config.js'));
-    const stylesTemplate = await readTextFile(join(templatesRoot, 'ui', 'styles.css'));
+  // Tailwind CSS is always included as the base CSS framework
+  const tailwindTemplate = await readTextFile(join(templatesRoot, 'ui', 'tailwind.config.js'));
+  const postcssTemplate = await readTextFile(join(templatesRoot, 'ui', 'postcss.config.js'));
+  const stylesTemplate = await readTextFile(join(templatesRoot, 'ui', 'styles.css'));
 
-    await writeTextFile(join(projectRoot, 'tailwind.config.js'), tailwindTemplate, ctx);
-    await writeTextFile(join(projectRoot, 'postcss.config.js'), postcssTemplate, ctx);
+  await writeTextFile(join(projectRoot, 'tailwind.config.js'), tailwindTemplate, ctx);
+  await writeTextFile(join(projectRoot, 'postcss.config.js'), postcssTemplate, ctx);
 
-    const stylesDir = join(projectRoot, 'src');
-    await ensureDir(stylesDir, ctx);
-    await writeTextFile(join(stylesDir, 'styles.css'), stylesTemplate, ctx);
+  const stylesDir = join(projectRoot, 'src');
+  await ensureDir(stylesDir, ctx);
+  await writeTextFile(join(stylesDir, 'styles.css'), stylesTemplate, ctx);
 
+  if (config.ui.library === 'none') {
     const demo = await readTextFile(
       join(templatesRoot, 'ui', config.frontend.language === 'ts' ? 'demo-tailwind.tsx' : 'demo-tailwind.jsx')
     );

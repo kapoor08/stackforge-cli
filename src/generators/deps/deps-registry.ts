@@ -34,11 +34,10 @@ export function collectDependencies(config: StackforgeConfig): DependencyResult 
     devDependencies['@types/react-dom'] = versions.typesReactDom;
   }
 
-  if (config.ui.library === 'tailwind' || config.ui.library === 'shadcn') {
-    devDependencies['tailwindcss'] = versions.tailwindcss;
-    devDependencies['postcss'] = versions.postcss;
-    devDependencies['autoprefixer'] = versions.autoprefixer;
-  }
+  // Tailwind CSS is always included as the base CSS framework
+  devDependencies['tailwindcss'] = versions.tailwindcss;
+  devDependencies['postcss'] = versions.postcss;
+  devDependencies['autoprefixer'] = versions.autoprefixer;
 
   if (config.ui.library === 'shadcn') {
     dependencies['class-variance-authority'] = versions.cva;

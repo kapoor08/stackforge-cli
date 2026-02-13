@@ -42,7 +42,14 @@ export async function generateDatabaseFiles(
   if (config.database.orm === 'drizzle') {
     const drizzleDir = join(projectRoot, 'drizzle');
     await ensureDir(drizzleDir, ctx);
-    const configContent = await readTextFile(join(templatesRoot, 'database', 'drizzle', 'drizzle.config.ts'));
+    let configContent = await readTextFile(join(templatesRoot, 'database', 'drizzle', 'drizzle.config.ts'));
+    const dialect =
+      config.database.provider === 'mysql'
+        ? 'mysql'
+        : config.database.provider === 'sqlite'
+        ? 'sqlite'
+        : 'postgresql';
+    configContent = configContent.replace("dialect: 'postgresql'", `dialect: '${dialect}'`);
     const schemaContent = await readTextFile(join(templatesRoot, 'database', 'drizzle', 'schema.ts'));
     const ext = config.frontend.language === 'ts' ? 'ts' : 'js';
     const clientContent = await readTextFile(join(templatesRoot, 'database', 'drizzle', `client.${ext}`));

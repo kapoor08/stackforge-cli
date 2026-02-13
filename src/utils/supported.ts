@@ -1,6 +1,6 @@
 export const supported = {
   frontend: ['nextjs', 'vite'] as const,
-  ui: ['none', 'tailwind', 'shadcn', 'mui', 'chakra', 'mantine', 'antd', 'nextui'] as const,
+  ui: ['none', 'shadcn', 'mui', 'chakra', 'mantine', 'antd', 'nextui'] as const,
   database: ['none', 'postgres', 'mysql', 'sqlite', 'mongodb', 'neon', 'supabase'] as const,
   orm: ['drizzle', 'prisma', 'mongoose', 'typeorm'] as const,
   auth: ['none', 'nextauth', 'clerk', 'better-auth', 'supabase'] as const,

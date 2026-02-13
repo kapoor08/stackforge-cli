@@ -22,11 +22,6 @@ export function collectScripts(config: StackforgeConfig): ScriptMap {
     }
   }
 
-  if (config.ui.library === 'tailwind') {
-    scripts['css:build'] = 'npx tailwindcss -i ./src/styles.css -o ./dist/styles.css';
-    scripts['css:watch'] = 'npx tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch';
-  }
-
   if (config.database.orm === 'drizzle') {
     scripts['db:generate'] = 'npx drizzle-kit generate';
     scripts['db:migrate'] = 'npx drizzle-kit migrate';

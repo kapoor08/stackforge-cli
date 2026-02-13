@@ -12,13 +12,6 @@ export async function cleanupFeature(
   const root = cwd;
 
   if (category === 'ui') {
-    if (config.ui.library === 'tailwind') {
-      await removePath(join(root, 'tailwind.config.js'));
-      await removePath(join(root, 'postcss.config.js'));
-      await removePath(join(root, 'src', 'styles.css'));
-      await removePath(join(root, 'src', 'components', 'ui-demo.tsx'));
-      await removePath(join(root, 'src', 'components', 'ui-demo.jsx'));
-    }
     if (config.ui.library === 'shadcn') {
       await removePath(join(root, 'components'));
       await removePath(join(root, 'components.json'));

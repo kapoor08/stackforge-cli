@@ -176,10 +176,9 @@ export async function generateFrontendFiles(
 
 function buildUiCssImports(config: StackforgeConfig, target: 'nextjs' | 'vite'): string[] {
   const imports: string[] = [];
+  // Tailwind CSS is always included
   const tailwindPath = target === 'nextjs' ? "../src/styles.css" : "./styles.css";
-  if (config.ui.library === 'tailwind') {
-    imports.push(`import '${tailwindPath}';\n`);
-  }
+  imports.push(`import '${tailwindPath}';\n`);
   if (config.ui.library === 'mantine') {
     imports.push("import '@mantine/core/styles.css';\n");
     imports.push("import '@mantine/dates/styles.css';\n");

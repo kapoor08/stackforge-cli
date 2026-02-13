@@ -4,7 +4,7 @@ export interface StackforgeConfig {
   projectName: string;
   packageManager: PackageManager;
   frontend: { type: 'nextjs' | 'vite'; language: 'ts' | 'js' };
-  ui: { library: 'tailwind' | 'shadcn' | 'mui' | 'chakra' | 'mantine' | 'antd' | 'nextui' | 'none' };
+  ui: { library: 'shadcn' | 'mui' | 'chakra' | 'mantine' | 'antd' | 'nextui' | 'none' };
   database: {
     provider: 'postgres' | 'mysql' | 'sqlite' | 'mongodb' | 'neon' | 'supabase' | 'none';
     orm?: 'drizzle' | 'prisma' | 'mongoose' | 'typeorm';
