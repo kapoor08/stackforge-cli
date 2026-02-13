@@ -1,4 +1,4 @@
-name: Release
+name: Release (Binaries)
 
 on:
   push:
@@ -22,8 +22,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install -g pnpm
-      - run: pnpm install
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8.12.0
+      - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Build binary
         run: pnpm exec pkg . --targets ${{ matrix.target }} --output dist/stackforge
@@ -65,18 +67,16 @@ jobs:
         with:
           node-version: 20
           registry-url: "https://registry.npmjs.org"
-      - run: npm install -g pnpm
-      - run: pnpm install
-      - run: pnpm test:smoke
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8.12.0
+      - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - uses: actions/download-artifact@v4
         with:
           path: dist/packages
           pattern: stackforge-*
           merge-multiple: true
-      - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:

@@ -10,6 +10,9 @@
   "scripts": {
     "dev": "tsx src/cli.ts",
     "build": "tsup src/cli.ts --format esm --sourcemap --clean",
+    "release": "pnpm build && pnpm publish --access public",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "build:bin": "pnpm exec pkg . --targets node18-win-x64,node18-macos-x64,node18-linux-x64 --output dist/stackforge",
@@ -54,6 +57,7 @@
   "devDependencies": {
     "@types/node": "^20.14.10",
     "eslint": "^8.57.0",
+    "@changesets/cli": "^2.27.9",
     "pkg": "^5.8.1",
     "tsup": "^8.2.3",
     "tsx": "^4.16.5",
