@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Configure .npmrc for publishing
         run: |
-          echo "@stackforge:registry=https://registry.npmjs.org/" > ~/.npmrc
+          echo "@lakshaykapoor08:registry=https://registry.npmjs.org/" > ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
