@@ -30,12 +30,12 @@ const projectRoot = join(tempRoot, config.projectName);
 const current = await readProjectConfig(projectRoot);
 
 // Add UI
-const nextUi = updateConfigForFeature(current, 'ui', 'tailwind', 'add');
+const nextUi = updateConfigForFeature(current, 'ui', 'shadcn', 'add');
 await writeProjectConfig(projectRoot, nextUi);
 await syncPackageJson(join(projectRoot, 'package.json'), current, nextUi);
 
 const afterAdd = await readProjectConfig(projectRoot);
-if (afterAdd.ui.library !== 'tailwind') throw new Error('Add UI failed');
+if (afterAdd.ui.library !== 'shadcn') throw new Error('Add UI failed');
 
 // Remove ORM
 await cleanupFeature(projectRoot, afterAdd, 'orm');

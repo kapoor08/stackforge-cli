@@ -13,7 +13,7 @@ const config: StackforgeConfig = {
   projectName: 'test-update',
   packageManager: 'npm',
   frontend: { type: 'nextjs', language: 'ts' },
-  ui: { library: 'tailwind' },
+  ui: { library: 'none' },
   database: { provider: 'postgres', orm: 'drizzle' },
   auth: { provider: 'none' },
   api: { type: 'none' },

@@ -7,7 +7,7 @@ test('config shape supports required fields', () => {
     projectName: 'demo',
     packageManager: 'pnpm',
     frontend: { type: 'vite', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'sqlite', orm: 'prisma' },
     auth: { provider: 'none' },
     api: { type: 'rest' },

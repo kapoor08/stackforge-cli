@@ -11,7 +11,7 @@ test('generateFrontendFiles creates vite files', async () => {
     projectName: 'app',
     packageManager: 'pnpm',
     frontend: { type: 'vite', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'none' },
     auth: { provider: 'none' },
     api: { type: 'none' },

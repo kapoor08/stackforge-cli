@@ -15,7 +15,7 @@ test('generated output includes real README content and env keys', async () => {
     projectName: 'app',
     packageManager: 'pnpm',
     frontend: { type: 'vite', language: 'ts' },
-    ui: { library: 'tailwind' },
+    ui: { library: 'none' },
     database: { provider: 'postgres', orm: 'drizzle' },
     auth: { provider: 'none' },
     api: { type: 'rest' },

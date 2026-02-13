@@ -1,6 +1,6 @@
 {
   "name": "create-stackforge",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The universal full-stack boilerplate generator. Scaffold production-ready apps with Next.js/Vite, 8 UI libraries, 6 databases, 4 ORMs, 3 auth providers, REST/tRPC/GraphQL, and AI agent integrations.",
   "license": "MIT",
   "author": "Lakshay Kapoor",
