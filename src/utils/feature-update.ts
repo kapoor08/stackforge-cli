@@ -52,7 +52,7 @@ export function updateConfigForFeature(
       next.database.orm = action === 'remove' ? undefined : (value as NonNullable<StackforgeConfig['database']['orm']>);
       break;
     case 'feature':
-      if (action === 'add' && value && !supported.features.includes(value as any)) {
+      if (action === 'add' && value && !(supported.features as readonly string[]).includes(value)) {
         throw new Error(`Unsupported feature: ${value}`);
       }
       if (action === 'add' && value) {

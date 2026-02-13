@@ -36,8 +36,9 @@ export async function generateApiFiles(
     if (config.frontend.type === 'nextjs') {
       const routeDir = join(projectRoot, 'app', 'api', 'hello');
       await ensureDir(routeDir, ctx);
-      const handler = await readTextFile(join(templatesRoot, 'api', 'rest', 'route.ts'));
-      await writeTextFile(join(routeDir, config.frontend.language === 'ts' ? 'route.ts' : 'route.js'), handler, ctx);
+      const ext = config.frontend.language === 'ts' ? 'ts' : 'js';
+      const handler = await readTextFile(join(templatesRoot, 'api', 'rest', `route.${ext}`));
+      await writeTextFile(join(routeDir, `route.${ext}`), handler, ctx);
 
       if (config.database.orm) {
         const usersDir = join(projectRoot, 'app', 'api', 'users');
@@ -195,8 +196,9 @@ export async function generateApiFiles(
 
       const routeDir = join(projectRoot, 'app', 'api', 'graphql');
       await ensureDir(routeDir, ctx);
-      const handler = await readTextFile(join(templatesRoot, 'api', 'graphql', 'route.ts'));
-      await writeTextFile(join(routeDir, config.frontend.language === 'ts' ? 'route.ts' : 'route.js'), handler, ctx);
+      const gqlExt = config.frontend.language === 'ts' ? 'ts' : 'js';
+      const handler = await readTextFile(join(templatesRoot, 'api', 'graphql', `route.${gqlExt}`));
+      await writeTextFile(join(routeDir, `route.${gqlExt}`), handler, ctx);
 
       const clientDir = join(projectRoot, 'src', 'graphql');
       const client = await readTextFile(

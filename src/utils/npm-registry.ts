@@ -1,8 +1,8 @@
-import { exec } from 'node:child_process';
+import { execFile } from 'node:child_process';
 
 export function fetchLatestVersion(pkg: string): Promise<string | null> {
   return new Promise((resolve) => {
-    exec(`npm view ${pkg} version`, (err, stdout) => {
+    execFile('npm', ['view', pkg, 'version'], (err, stdout) => {
       if (err) {
         resolve(null);
         return;

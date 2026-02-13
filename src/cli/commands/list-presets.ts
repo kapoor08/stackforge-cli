@@ -1,11 +1,11 @@
 import { Command } from 'commander';
 import { logger } from '../../utils/logger.js';
-import { getPreset } from '../../presets/index.js';
+import { getPreset, presetNames } from '../../presets/index.js';
 
 export const listPresetsCommand = new Command('list-presets')
   .option('--details', 'show preset details')
   .action((options) => {
-    const presets = ['starter', 'saas', 'ecommerce', 'blog', 'api'];
+    const presets = presetNames;
     for (const name of presets) {
       const preset = getPreset(name);
       if (!preset) {

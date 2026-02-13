@@ -40,7 +40,11 @@ export async function removeEnvKey(
   } catch {
     return;
   }
-  const lines = existing.split(/\r?\n/).filter((line) => line.trim() !== '');
-  const filtered = lines.filter((line) => !line.startsWith(`${key}=`) && !line.startsWith(`${key}="`));
-  await writeFile(path, filtered.join('\n') + (filtered.length ? '\n' : ''), 'utf8');
+  const lines = existing.split(/\r?\n/);
+  const filtered = lines.filter((line) => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return true;
+    return !trimmed.startsWith(`${key}=`);
+  });
+  await writeFile(path, filtered.join('\n'), 'utf8');
 }

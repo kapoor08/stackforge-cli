@@ -5,11 +5,12 @@ import { checkProject, fixProject } from '../../utils/doctor.js';
 export const fixCommand = new Command('fix')
   .description('apply safe fixes to project configuration')
   .action(async () => {
-    const result = await checkProject(process.cwd());
+    const cwd = process.cwd();
+    const result = await checkProject(cwd);
     if (result.issues.length === 0) {
       logger.info('No issues found.');
       return;
     }
-    await fixProject(result);
+    await fixProject(result, cwd);
     logger.info('Applied fixes.');
   });

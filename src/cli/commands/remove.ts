@@ -11,10 +11,11 @@ import { writeTextFile } from '../../utils/file-system.js';
 import { join } from 'node:path';
 
 function parseFeature(feature: string): { category: string; value: string } {
-  const [category, value] = feature.split(':');
-  if (!category || !value) {
+  const parts = feature.split(':');
+  if (parts.length !== 2 || !parts[0] || !parts[1]) {
     throw new Error('Feature must be in the form category:value (e.g., auth:nextauth).');
   }
+  const [category, value] = parts;
   return { category, value };
 }
 
@@ -58,22 +59,27 @@ function assertRemovalTarget(category: string, value: string, current: Awaited<R
 export const removeCommand = new Command('remove')
   .argument('<feature>', 'feature to remove (category:value)')
   .action(async (feature) => {
-    const cwd = process.cwd();
-    const { category, value } = parseFeature(feature);
-    const current = await readProjectConfig(cwd);
-    assertRemovalTarget(category, value, current);
-    await cleanupFeature(cwd, current, category, value);
+    try {
+      const cwd = process.cwd();
+      const { category, value } = parseFeature(feature);
+      const current = await readProjectConfig(cwd);
+      assertRemovalTarget(category, value, current);
+      await cleanupFeature(cwd, current, category, value);
 
-    const next = updateConfigForFeature(current, category, value, 'remove');
-    validateConfig(next);
-    validateCompatibility(next);
-    validateDependencies(next);
+      const next = updateConfigForFeature(current, category, value, 'remove');
+      validateConfig(next);
+      validateCompatibility(next);
+      validateDependencies(next);
 
-    await writeProjectConfig(cwd, next);
-    await syncPackageJson(`${cwd}/package.json`, current, next);
+      await writeProjectConfig(cwd, next);
+      await syncPackageJson(`${cwd}/package.json`, current, next);
 
-    const readme = buildProjectReadme(next);
-    await writeTextFile(join(cwd, 'README.md'), readme + '\n');
+      const readme = buildProjectReadme(next);
+      await writeTextFile(join(cwd, 'README.md'), readme + '\n');
 
-    logger.info(`Removed ${feature}`);
+      logger.info(`Removed ${feature}`);
+    } catch (err) {
+      logger.error(err instanceof Error ? err.message : String(err));
+      process.exitCode = 1;
+    }
   });

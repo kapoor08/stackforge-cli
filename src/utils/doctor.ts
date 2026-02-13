@@ -12,14 +12,14 @@ import { readProjectConfig } from './project-config.js';
 
 export interface DoctorResult {
   issues: string[];
-  config: Awaited<ReturnType<typeof readProjectConfig>>;
+  config?: Awaited<ReturnType<typeof readProjectConfig>>;
   pkgPath: string;
   envPath: string;
   hasConfig: boolean;
   hasPackageJson: boolean;
 }
 
-function requiredEnvKeys(config: DoctorResult['config']): string[] {
+function requiredEnvKeys(config: NonNullable<DoctorResult['config']>): string[] {
   const keys: string[] = [];
   if (config.database.provider !== 'none') keys.push('DATABASE_URL');
   if (config.database.provider === 'neon') keys.push('NEON_API_KEY', 'NEON_PROJECT_ID');
@@ -43,6 +43,8 @@ function agentFiles(agent: string): string[] {
   if (agent === 'gemini') files.push('function_declarations.json');
   if (agent === 'cursor') files.push('.cursorrules');
   if (agent === 'codeium') files.push('server-config.json');
+  if (agent === 'windsurf') files.push('cascade.json');
+  if (agent === 'tabnine') files.push('config.json');
   return files;
 }
 
@@ -55,7 +57,7 @@ export async function checkProject(cwd: string): Promise<DoctorResult> {
   if (!existsSync(configPath)) {
     return {
       issues: ['Missing stackforge.json. Run from a StackForge project root.'],
-      config: await Promise.reject(new Error('Missing stackforge.json')),
+      config: undefined,
       pkgPath,
       envPath,
       hasConfig: false,
@@ -154,8 +156,9 @@ export async function checkProject(cwd: string): Promise<DoctorResult> {
   };
 }
 
-export async function fixProject(result: DoctorResult): Promise<void> {
+export async function fixProject(result: DoctorResult, cwd: string): Promise<void> {
   const { config, pkgPath, envPath } = result;
+  if (!config) return;
   await syncPackageJson(pkgPath, config, config);
 
   const envContent = existsSync(envPath) ? await readFile(envPath, 'utf8') : '';
@@ -172,10 +175,10 @@ export async function fixProject(result: DoctorResult): Promise<void> {
   }
 
   if (config.aiAgents.length > 0) {
-    const base = basename(process.cwd()) === config.projectName ? dirname(process.cwd()) : process.cwd();
+    const base = basename(cwd) === config.projectName ? dirname(cwd) : cwd;
     await generateAiAgentConfigs(base, config);
   }
 
   const readme = buildProjectReadme(config);
-  await writeTextFile(join(process.cwd(), 'README.md'), readme + '\n');
+  await writeTextFile(join(cwd, 'README.md'), readme + '\n');
 }

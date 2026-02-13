@@ -1,5 +1,4 @@
 import { exec } from 'node:child_process';
-import { join } from 'node:path';
 import type { PackageManager } from '../types/config.js';
 
 export function getInstallCommand(pm: PackageManager): string {

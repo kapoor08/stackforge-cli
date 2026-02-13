@@ -45,6 +45,8 @@ const presets: Record<PresetName, Partial<StackforgeConfig>> = {
   }
 };
 
+export const presetNames: PresetName[] = Object.keys(presets) as PresetName[];
+
 export function getPreset(name: string | undefined): Partial<StackforgeConfig> | null {
   if (!name) return null;
   return presets[name as PresetName] ?? null;

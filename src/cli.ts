@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import { createRequire } from 'node:module';
 import { createCommand } from './cli/commands/create.js';
 import { listCommand } from './cli/commands/list.js';
 import { addCommand } from './cli/commands/add.js';
@@ -17,12 +18,15 @@ import { fixCommand } from './cli/commands/fix.js';
 import { upgradeCommand } from './cli/commands/upgrade.js';
 import { logger } from './utils/logger.js';
 
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json');
+
 const program = new Command();
 
 program
   .name('create-stackforge')
   .description('Universal full-stack boilerplate generator')
-  .version('0.0.0');
+  .version(version);
 
 program.addCommand(createCommand);
 program.addCommand(listCommand);

@@ -288,13 +288,11 @@ export async function generateAiAgentConfigs(
     if (agent === 'gemini') {
       const content = JSON.stringify({ functions: buildFunctionDefinitions(tools) }, null, 2);
       await writeTextFile(join(agentDir, 'function_declarations.json'), content + '\n', ctx);
-      await writeTextFile(join(agentDir, 'function-declarations.json'), content + '\n', ctx);
       const serverDir = join(serversRoot, 'gemini');
       await ensureDir(serverDir, ctx);
       const serverContent = `export const functions = ${JSON.stringify(buildFunctionDefinitions(tools), null, 2)};\n\nexport function handleFunctionCall(name, args) {\n  return { name, args, ok: true, message: 'Implement tool logic here.' };\n}\n`;
       await writeTextFile(join(serverDir, `functions.${ext}`), serverContent, ctx);
       await writeTextFile(join(serverDir, 'function_declarations.json'), content + '\n', ctx);
-      await writeTextFile(join(serverDir, 'function-declarations.json'), content + '\n', ctx);
     }
 
     if (agent === 'cursor') {
@@ -406,29 +404,68 @@ ${hints || '- none'}
 
 function buildMcpServerContent(ext: string, tools: string[], hints: string[]): string {
   const toolCases = [
-    "case 'stackforge_database':\\n      return { ok: true, message: 'Check DATABASE_URL in .env and review db clients in src/db or drizzle/' };",
-    "case 'stackforge_orm':\\n      return { ok: true, message: 'Review ORM schema or models in drizzle/ or prisma/ or src/db' };",
-    "case 'stackforge_api':\\n      return { ok: true, message: 'API routes in app/api and clients in src/api, src/graphql, or src/trpc' };",
-    "case 'stackforge_auth':\\n      return { ok: true, message: 'Auth routes in app/api/auth and auth helpers in auth/' };",
-    "case 'stackforge_email':\\n      return { ok: true, message: 'Email client at src/lib/resend.ts and docs in features/email' };",
-    "case 'stackforge_storage':\\n      return { ok: true, message: 'Storage docs in features/storage' };",
-    "case 'stackforge_payments':\\n      return { ok: true, message: 'Stripe client at src/lib/stripe.ts and docs in features/payments' };",
-    "case 'stackforge_analytics':\\n      return { ok: true, message: 'PostHog client at src/lib/posthog.ts' };",
-    "case 'stackforge_error-tracking':\\n      return { ok: true, message: 'Sentry client at src/lib/sentry.ts' };"
-  ].join('\\n    ');
+    "case 'stackforge_database':\n      return { ok: true, message: 'Check DATABASE_URL in .env and review db clients in src/db or drizzle/' };",
+    "case 'stackforge_orm':\n      return { ok: true, message: 'Review ORM schema or models in drizzle/ or prisma/ or src/db' };",
+    "case 'stackforge_api':\n      return { ok: true, message: 'API routes in app/api and clients in src/api, src/graphql, or src/trpc' };",
+    "case 'stackforge_auth':\n      return { ok: true, message: 'Auth routes in app/api/auth and auth helpers in auth/' };",
+    "case 'stackforge_email':\n      return { ok: true, message: 'Email client at src/lib/resend.ts and docs in features/email' };",
+    "case 'stackforge_storage':\n      return { ok: true, message: 'Storage docs in features/storage' };",
+    "case 'stackforge_payments':\n      return { ok: true, message: 'Stripe client at src/lib/stripe.ts and docs in features/payments' };",
+    "case 'stackforge_analytics':\n      return { ok: true, message: 'PostHog client at src/lib/posthog.ts' };",
+    "case 'stackforge_error-tracking':\n      return { ok: true, message: 'Sentry client at src/lib/sentry.ts' };"
+  ].join('\n    ');
 
-  const common = `const tools = ${JSON.stringify(tools, null, 2)};\\nconst hints = ${JSON.stringify(
-    hints,
-    null,
-    2
-  )};\\n\\nfunction handleTool(name${ext === 'ts' ? ': string' : ''}, action${
-    ext === 'ts' ? ': string' : ''
-  }) {\\n  switch (name) {\\n    ${toolCases}\\n    default:\\n      return { ok: false, message: 'Unknown tool' };\\n  }\\n}\\n\\nconst server = ${
-    ext === 'ts' ? 'createServer' : 'http.createServer'
-  }((req, res) => {\\n  if (req.url === '/tools') {\\n    res.writeHead(200, { 'Content-Type': 'application/json' });\\n    res.end(JSON.stringify({ tools, hints }));\\n    return;\\n  }\\n  if (req.url === '/invoke' && req.method === 'POST') {\\n    let body = '';\\n    req.on('data', (chunk) => (body += chunk));\\n    req.on('end', () => {\\n      try {\\n        const payload = JSON.parse(body || '{}');\\n        const name = payload.name || '';\\n        const action = payload.arguments?.action || '';\\n        const result = handleTool(name, action);\\n        res.writeHead(200, { 'Content-Type': 'application/json' });\\n        res.end(JSON.stringify(result));\\n      } catch (err) {\\n        res.writeHead(400, { 'Content-Type': 'application/json' });\\n        res.end(JSON.stringify({ ok: false, message: 'Invalid JSON' }));\\n      }\\n    });\\n    return;\\n  }\\n  res.writeHead(404);\\n  res.end();\\n});\\n\\nconst port = Number(process.env.MCP_PORT || 7341);\\nserver.listen(port, () => {\\n  console.log('MCP server listening on', port);\\n});\\n`;
+  const nameType = ext === 'ts' ? ': string' : '';
+  const actionType = ext === 'ts' ? ': string' : '';
+  const createServerExpr = ext === 'ts' ? 'createServer' : 'http.createServer';
+  const importLine = ext === 'ts'
+    ? "import { createServer } from 'node:http';"
+    : "const http = require('node:http');";
 
-  if (ext === 'ts') {
-    return `import { createServer } from 'node:http';\\n\\n${common}`;
+  return `${importLine}
+
+const tools = ${JSON.stringify(tools, null, 2)};
+const hints = ${JSON.stringify(hints, null, 2)};
+
+function handleTool(name${nameType}, action${actionType}) {
+  switch (name) {
+    ${toolCases}
+    default:
+      return { ok: false, message: 'Unknown tool' };
   }
-  return `const http = require('node:http');\\n\\n${common}`;
+}
+
+const server = ${createServerExpr}((req, res) => {
+  if (req.url === '/tools') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ tools, hints }));
+    return;
+  }
+  if (req.url === '/invoke' && req.method === 'POST') {
+    let body = '';
+    req.on('data', (chunk) => (body += chunk));
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const name = payload.name || '';
+        const action = payload.arguments?.action || '';
+        const result = handleTool(name, action);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, message: 'Invalid JSON' }));
+      }
+    });
+    return;
+  }
+  res.writeHead(404);
+  res.end();
+});
+
+const port = Number(process.env.MCP_PORT || 7341);
+server.listen(port, () => {
+  console.log('MCP server listening on', port);
+});
+`;
 }

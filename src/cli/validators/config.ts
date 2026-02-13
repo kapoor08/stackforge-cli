@@ -21,17 +21,9 @@ export function validateConfig(config: StackforgeConfig): void {
     throw new Error(`Unsupported API: ${config.api.type}`);
   }
   for (const feature of config.features) {
-    if (!supported.features.includes(feature as any)) {
+    if (!(supported.features as readonly string[]).includes(feature)) {
       throw new Error(`Unsupported feature: ${feature}`);
     }
-  }
-
-  if (config.auth.provider === 'nextauth' && config.frontend.type !== 'nextjs') {
-    throw new Error('NextAuth requires Next.js.');
-  }
-
-  if (config.api.type === 'trpc' && config.frontend.language !== 'ts') {
-    throw new Error('tRPC requires TypeScript.');
   }
 
   if (config.database.orm && config.database.provider === 'none') {

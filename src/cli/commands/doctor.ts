@@ -48,7 +48,7 @@ export const doctorCommand = new Command('doctor')
     }
 
     if (options.fix) {
-      await fixProject(result);
+      await fixProject(result, cwd);
       logger.info('Applied fixes.');
     }
   });

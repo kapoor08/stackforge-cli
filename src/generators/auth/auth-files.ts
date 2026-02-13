@@ -23,7 +23,7 @@ export async function generateAuthFiles(
       const routeDir = join(projectRoot, 'app', 'api', 'auth', '[...nextauth]');
       await ensureDir(routeDir, ctx);
 
-      const route = await readTextFile(join(templatesRoot, 'auth', 'nextauth-route.ts'));
+      const route = await readTextFile(join(templatesRoot, 'auth', `nextauth-route.${ext}`));
       await writeTextFile(join(routeDir, config.frontend.language === 'ts' ? 'route.ts' : 'route.js'), route, ctx);
     }
 
