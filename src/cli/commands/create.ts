@@ -51,8 +51,15 @@ export const createCommand = new Command('create')
     await runGenerators(outDir, config, ctx);
     if (options.install !== false && !options.dryRun) {
       const projectRoot = join(outDir, config.projectName);
-      logger.info('Installing dependencies...');
+      logger.info('Installing dependencies (using cached packages when available)...');
+      const startTime = Date.now();
       await runInstall(config.packageManager, projectRoot);
+      const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+      logger.info(`Dependencies installed in ${duration}s`);
+    } else if (options.install === false) {
+      logger.info('Skipped dependency installation. Run the following to install:');
+      logger.info(`  cd ${config.projectName}`);
+      logger.info(`  ${config.packageManager} install`);
     }
-    logger.info(`Project created: ${config.projectName}`);
+    logger.info(`\nProject created: ${config.projectName}`);
   });

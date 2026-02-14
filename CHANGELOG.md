@@ -1,5 +1,11 @@
 # create-stackforge
 
+## 0.4.1
+
+### Patch Changes
+
+- CLI updates
+
 ## 0.4.0
 
 ### Minor Changes
