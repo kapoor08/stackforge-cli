@@ -1,4 +1,4 @@
-import type { StackforgeConfig } from '../../types/config.js';
+import type { StackforgeConfig } from '../types/config.js';
 
 export function defaultConfig(): StackforgeConfig {
   return {
@@ -9,7 +9,7 @@ export function defaultConfig(): StackforgeConfig {
     database: { provider: 'none' },
     auth: { provider: 'none' },
     api: { type: 'none' },
-    features: [],
+    features: {},
     aiAgents: []
   };
 }

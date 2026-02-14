@@ -17,7 +17,7 @@ const config: StackforgeConfig = {
   database: { provider: 'postgres', orm: 'drizzle' },
   auth: { provider: 'none' },
   api: { type: 'none' },
-  features: [],
+  features: {},
   aiAgents: []
 };
 

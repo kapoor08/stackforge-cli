@@ -17,7 +17,7 @@ const config: StackforgeConfig = {
   database: { provider: 'postgres', orm: 'drizzle' },
   auth: { provider: 'nextauth' },
   api: { type: 'trpc' },
-  features: ['email'],
+  features: { email: 'resend' },
   aiAgents: []
 };
 

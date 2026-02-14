@@ -27,11 +27,39 @@ function requiredEnvKeys(config: NonNullable<DoctorResult['config']>): string[] 
   if (config.auth.provider === 'nextauth') keys.push('NEXTAUTH_SECRET', 'NEXTAUTH_URL');
   if (config.auth.provider === 'clerk') keys.push('CLERK_SECRET_KEY', 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY');
   if (config.auth.provider === 'supabase') keys.push('NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_ANON_KEY');
-  if (config.features.includes('email')) keys.push('RESEND_API_KEY');
-  if (config.features.includes('storage')) keys.push('CLOUDINARY_URL');
-  if (config.features.includes('payments')) keys.push('STRIPE_SECRET_KEY');
-  if (config.features.includes('analytics')) keys.push('NEXT_PUBLIC_POSTHOG_KEY', 'NEXT_PUBLIC_POSTHOG_HOST');
-  if (config.features.includes('error-tracking')) keys.push('SENTRY_DSN');
+
+  // Email provider keys
+  if (config.features.email === 'resend') keys.push('RESEND_API_KEY');
+  else if (config.features.email === 'sendgrid') keys.push('SENDGRID_API_KEY');
+  else if (config.features.email === 'mailgun') keys.push('MAILGUN_API_KEY', 'MAILGUN_DOMAIN');
+  else if (config.features.email === 'nodemailer') keys.push('SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS');
+  else if (config.features.email === 'mailersend') keys.push('MAILERSEND_API_KEY');
+  else if (config.features.email === 'aws-ses') keys.push('AWS_SES_REGION', 'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY');
+
+  // Storage provider keys
+  if (config.features.storage === 'cloudinary') keys.push('CLOUDINARY_URL');
+  else if (config.features.storage === 'aws-s3') keys.push('AWS_S3_BUCKET', 'AWS_REGION', 'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY');
+  else if (config.features.storage === 'cloudflare-r2') keys.push('R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET');
+  else if (config.features.storage === 'vercel-blob') keys.push('BLOB_READ_WRITE_TOKEN');
+  else if (config.features.storage === 'supabase-storage') keys.push('SUPABASE_URL', 'SUPABASE_ANON_KEY');
+  else if (config.features.storage === 'firebase-storage') keys.push('FIREBASE_STORAGE_BUCKET');
+  else if (config.features.storage === 'azure-blob') keys.push('AZURE_STORAGE_CONNECTION_STRING');
+  else if (config.features.storage === 'gcs') keys.push('GCS_BUCKET', 'GOOGLE_APPLICATION_CREDENTIALS');
+
+  // Payment provider keys
+  if (config.features.payments === 'stripe') keys.push('STRIPE_SECRET_KEY');
+  else if (config.features.payments === 'paypal') keys.push('PAYPAL_CLIENT_ID', 'PAYPAL_CLIENT_SECRET');
+  else if (config.features.payments === 'razorpay') keys.push('RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET');
+
+  // Analytics provider keys
+  if (config.features.analytics === 'posthog') keys.push('NEXT_PUBLIC_POSTHOG_KEY', 'NEXT_PUBLIC_POSTHOG_HOST');
+  else if (config.features.analytics === 'ga4') keys.push('NEXT_PUBLIC_GA4_MEASUREMENT_ID');
+  else if (config.features.analytics === 'segment') keys.push('NEXT_PUBLIC_SEGMENT_WRITE_KEY');
+
+  // Error tracking provider keys
+  if (config.features.errorTracking === 'sentry') keys.push('SENTRY_DSN');
+  else if (config.features.errorTracking === 'logrocket') keys.push('NEXT_PUBLIC_LOGROCKET_APP_ID');
+
   return keys;
 }
 

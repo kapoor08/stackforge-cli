@@ -199,7 +199,7 @@ function buildProvidersComponent(config: StackforgeConfig, target: 'nextjs' | 'v
   const ui = config.ui.library;
   const needsTheme = ['mui', 'chakra', 'mantine', 'antd', 'nextui'].includes(ui);
   const isTypescript = config.frontend.language === 'ts';
-  const hasFeatureInit = config.features.includes('analytics') || config.features.includes('error-tracking');
+  const hasFeatureInit = config.features.analytics || config.features.errorTracking;
   const themeImportPath = target === 'nextjs' ? '../src/theme' : './theme';
 
   const imports: string[] = [];
@@ -245,11 +245,11 @@ function buildProvidersComponent(config: StackforgeConfig, target: 'nextjs' | 'v
   if (needsTheme) {
     imports.push(`import { theme } from '${themeImportPath}';`);
   }
-  if (config.features.includes('analytics')) {
+  if (config.features.analytics) {
     const analyticsPath = target === 'nextjs' ? '../src/lib/posthog' : './lib/posthog';
     imports.push(`import { initPosthog } from '${analyticsPath}';`);
   }
-  if (config.features.includes('error-tracking')) {
+  if (config.features.errorTracking) {
     const sentryPath = target === 'nextjs' ? '../src/lib/sentry' : './lib/sentry';
     imports.push(`import { initSentry } from '${sentryPath}';`);
   }
@@ -264,10 +264,10 @@ function buildProvidersComponent(config: StackforgeConfig, target: 'nextjs' | 'v
   }
   if (hasFeatureInit) {
     lines.push('  useEffect(() => {\n');
-    if (config.features.includes('analytics')) {
+    if (config.features.analytics) {
       lines.push('    initPosthog();\n');
     }
-    if (config.features.includes('error-tracking')) {
+    if (config.features.errorTracking) {
       lines.push('    initSentry();\n');
     }
     lines.push('  }, []);\n\n');
@@ -300,11 +300,11 @@ function buildFeatureInit(config: StackforgeConfig, target: 'vite' | 'nextjs'): 
   if (target !== 'vite') return { initImports: '', initCalls: '' };
   const imports: string[] = [];
   const calls: string[] = [];
-  if (config.features.includes('analytics')) {
+  if (config.features.analytics) {
     imports.push("import { initPosthog } from './lib/posthog';");
     calls.push('initPosthog();');
   }
-  if (config.features.includes('error-tracking')) {
+  if (config.features.errorTracking) {
     imports.push("import { initSentry } from './lib/sentry';");
     calls.push('initSentry();');
   }
@@ -348,11 +348,11 @@ function buildApiExamples(
 
 function buildFeatureNotes(config: StackforgeConfig): string {
   const notes: string[] = [];
-  if (config.features.includes('analytics')) notes.push('<p>Analytics enabled (PostHog).</p>');
-  if (config.features.includes('error-tracking')) notes.push('<p>Error tracking enabled (Sentry).</p>');
-  if (config.features.includes('email')) notes.push('<p>Email feature enabled (Resend).</p>');
-  if (config.features.includes('payments')) notes.push('<p>Payments feature enabled (Stripe).</p>');
-  if (config.features.includes('storage')) notes.push('<p>Storage feature enabled (Cloudinary).</p>');
+  if (config.features.analytics) notes.push('<p>Analytics enabled (PostHog).</p>');
+  if (config.features.errorTracking) notes.push('<p>Error tracking enabled (Sentry).</p>');
+  if (config.features.email) notes.push('<p>Email feature enabled (Resend).</p>');
+  if (config.features.payments) notes.push('<p>Payments feature enabled (Stripe).</p>');
+  if (config.features.storage) notes.push('<p>Storage feature enabled (Cloudinary).</p>');
   if (!notes.length) return '';
   return notes.join('\n      ');
 }

@@ -156,24 +156,68 @@ export function collectDependencies(config: StackforgeConfig): DependencyResult 
     dependencies['graphql-yoga'] = versions.graphqlYoga;
   }
 
-  if (config.features.includes('email')) {
+  // Email providers
+  if (config.features.email === 'resend') {
     dependencies['resend'] = versions.resend;
+  } else if (config.features.email === 'sendgrid') {
+    dependencies['@sendgrid/mail'] = versions.sendgrid;
+  } else if (config.features.email === 'aws-ses') {
+    dependencies['@aws-sdk/client-ses'] = versions.awsSes;
+  } else if (config.features.email === 'mailgun') {
+    dependencies['mailgun.js'] = versions.mailgun;
+  } else if (config.features.email === 'nodemailer') {
+    dependencies['nodemailer'] = versions.nodemailer;
+    if (config.frontend.language === 'ts') {
+      devDependencies['@types/nodemailer'] = versions.typesNodemailer;
+    }
+  } else if (config.features.email === 'mailersend') {
+    dependencies['mailersend'] = versions.mailersend;
   }
 
-  if (config.features.includes('storage')) {
+  // Storage providers
+  if (config.features.storage === 'cloudinary') {
     dependencies['cloudinary'] = versions.cloudinary;
+  } else if (config.features.storage === 'aws-s3') {
+    dependencies['@aws-sdk/client-s3'] = versions.awsS3;
+  } else if (config.features.storage === 'cloudflare-r2') {
+    dependencies['@aws-sdk/client-s3'] = versions.cloudflareR2;
+  } else if (config.features.storage === 'vercel-blob') {
+    dependencies['@vercel/blob'] = versions.vercelBlob;
+  } else if (config.features.storage === 'supabase-storage') {
+    dependencies['@supabase/supabase-js'] = versions.supabaseStorage;
+  } else if (config.features.storage === 'firebase-storage') {
+    dependencies['firebase'] = versions.firebaseStorage;
+  } else if (config.features.storage === 'azure-blob') {
+    dependencies['@azure/storage-blob'] = versions.azureBlob;
+  } else if (config.features.storage === 'gcs') {
+    dependencies['@google-cloud/storage'] = versions.gcs;
   }
 
-  if (config.features.includes('payments')) {
+  // Payment providers
+  if (config.features.payments === 'stripe') {
     dependencies['stripe'] = versions.stripe;
+  } else if (config.features.payments === 'paypal') {
+    dependencies['@paypal/checkout-server-sdk'] = versions.paypal;
+  } else if (config.features.payments === 'razorpay') {
+    dependencies['razorpay'] = versions.razorpay;
   }
 
-  if (config.features.includes('analytics')) {
+  // Analytics providers
+  if (config.features.analytics === 'posthog') {
     dependencies['posthog-js'] = versions.posthog;
+  } else if (config.features.analytics === 'ga4') {
+    dependencies['react-ga4'] = versions.reactGa4;
+  } else if (config.features.analytics === 'vercel-analytics') {
+    dependencies['@vercel/analytics'] = versions.vercelAnalytics;
+  } else if (config.features.analytics === 'segment') {
+    dependencies['@segment/analytics-next'] = versions.segment;
   }
 
-  if (config.features.includes('error-tracking') && config.frontend.type === 'nextjs') {
+  // Error tracking providers
+  if (config.features.errorTracking === 'sentry' && config.frontend.type === 'nextjs') {
     dependencies['@sentry/nextjs'] = versions.sentryNext;
+  } else if (config.features.errorTracking === 'logrocket') {
+    dependencies['logrocket'] = versions.logrocket;
   }
 
   return { dependencies, devDependencies };

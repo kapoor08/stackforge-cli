@@ -25,11 +25,11 @@ function buildTools(config: StackforgeConfig): string[] {
   if (config.database.orm) tools.push('orm');
   if (config.api.type !== 'none') tools.push('api');
   if (config.auth.provider !== 'none') tools.push('auth');
-  if (config.features.includes('email')) tools.push('email');
-  if (config.features.includes('storage')) tools.push('storage');
-  if (config.features.includes('payments')) tools.push('payments');
-  if (config.features.includes('analytics')) tools.push('analytics');
-  if (config.features.includes('error-tracking')) tools.push('error-tracking');
+  if (config.features.email) tools.push('email');
+  if (config.features.storage) tools.push('storage');
+  if (config.features.payments) tools.push('payments');
+  if (config.features.analytics) tools.push('analytics');
+  if (config.features.errorTracking) tools.push('error-tracking');
   return tools;
 }
 
@@ -180,8 +180,8 @@ function buildHints(config: StackforgeConfig): string[] {
   if (config.ui.library === 'mantine') hints.push('Mantine docs in components/README.md');
   if (config.ui.library === 'antd') hints.push('Ant Design docs in components/README.md');
   if (config.ui.library === 'nextui') hints.push('NextUI docs in components/README.md');
-  if (config.features.includes('analytics')) hints.push('Analytics client at src/lib/posthog.ts');
-  if (config.features.includes('error-tracking')) hints.push('Error tracking at src/lib/sentry.ts');
+  if (config.features.analytics) hints.push(`Analytics client at src/lib/${config.features.analytics}.ts`);
+  if (config.features.errorTracking) hints.push(`Error tracking at src/lib/${config.features.errorTracking}.ts`);
   if (config.auth.provider === 'nextauth') hints.push('NextAuth route at app/api/auth/[...nextauth]/route.ts');
   if (config.auth.provider === 'clerk') hints.push('Clerk middleware at middleware.ts');
   if (config.auth.provider === 'supabase') hints.push('Supabase client at src/lib/supabase.ts');

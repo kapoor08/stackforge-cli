@@ -15,7 +15,7 @@ test('generateFrontendFiles creates vite files', async () => {
     database: { provider: 'none' },
     auth: { provider: 'none' },
     api: { type: 'none' },
-    features: [],
+    features: {},
     aiAgents: []
   };
 

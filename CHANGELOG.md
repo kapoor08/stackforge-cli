@@ -1,5 +1,11 @@
 # create-stackforge
 
+## 0.4.0
+
+### Minor Changes
+
+- "create-stackforge": minor
+
 ## 0.3.0
 
 ### Minor Changes

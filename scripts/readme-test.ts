@@ -9,7 +9,7 @@ const config: StackforgeConfig = {
   database: { provider: 'none' },
   auth: { provider: 'none' },
   api: { type: 'rest' },
-  features: ['email'],
+  features: { email: 'resend' },
   aiAgents: []
 };
 

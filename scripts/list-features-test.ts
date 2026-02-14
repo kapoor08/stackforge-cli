@@ -17,7 +17,7 @@ const config: StackforgeConfig = {
   database: { provider: 'none' },
   auth: { provider: 'none' },
   api: { type: 'none' },
-  features: ['email', 'payments'],
+  features: { email: 'resend', payments: 'stripe' },
   aiAgents: []
 };
 

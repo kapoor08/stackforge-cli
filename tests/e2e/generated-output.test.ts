@@ -19,7 +19,7 @@ test('generated output includes real README content and env keys', async () => {
     database: { provider: 'postgres', orm: 'drizzle' },
     auth: { provider: 'none' },
     api: { type: 'rest' },
-    features: ['email', 'storage', 'payments'],
+    features: { email: 'resend', storage: 'cloudinary', payments: 'stripe' },
     aiAgents: []
   };
 

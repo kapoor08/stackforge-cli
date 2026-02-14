@@ -86,6 +86,14 @@ const packageMap: Record<string, string> = {
   vercelAnalytics: '@vercel/analytics',
   sentryNext: '@sentry/nextjs',
   logrocket: 'logrocket',
+  mailgun: 'mailgun.js',
+  mailersend: 'mailersend',
+  cloudflareR2: '@aws-sdk/client-s3',
+  supabaseStorage: '@supabase/supabase-js',
+  firebaseStorage: 'firebase',
+  azureBlob: '@azure/storage-blob',
+  gcs: '@google-cloud/storage',
+  segment: '@segment/analytics-next'
 };
 
 function fetchLatestVersion(pkg: string): Promise<string | null> {

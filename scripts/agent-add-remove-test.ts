@@ -18,7 +18,7 @@ const config: StackforgeConfig = {
   database: { provider: 'none' },
   auth: { provider: 'none' },
   api: { type: 'none' },
-  features: [],
+  features: {},
   aiAgents: []
 };
 

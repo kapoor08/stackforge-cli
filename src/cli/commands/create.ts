@@ -6,7 +6,7 @@ import { validateCompatibility } from '../validators/compatibility.js';
 import { validateDependencies } from '../validators/dependencies.js';
 import { logger } from '../../utils/logger.js';
 import { runInstall } from '../../utils/install.js';
-import { join, resolve } from 'node:path';
+import { join, resolve, basename } from 'node:path';
 
 function parseCsv(input?: string): string[] | undefined {
   if (!input) return undefined;
@@ -26,7 +26,14 @@ export const createCommand = new Command('create')
   .action(async (projectName, options) => {
     logger.info('Starting StackForge create flow...');
     const skipPrompts = Boolean(options.yes || options.noPrompts);
-    const config = await promptForConfig({ projectName, preset: options.preset, skipPrompts });
+
+    // Handle '.' to use current directory name
+    let resolvedProjectName = projectName;
+    if (projectName === '.') {
+      resolvedProjectName = basename(process.cwd());
+    }
+
+    const config = await promptForConfig({ projectName: resolvedProjectName, preset: options.preset, skipPrompts });
     if (options.aiAgents) {
       config.aiAgents = parseCsv(options.aiAgents) ?? [];
     }

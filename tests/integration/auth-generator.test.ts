@@ -15,7 +15,7 @@ test('generateAuthFiles creates nextauth protected page', async () => {
     database: { provider: 'none' },
     auth: { provider: 'nextauth' },
     api: { type: 'none' },
-    features: [],
+    features: {},
     aiAgents: []
   };
 

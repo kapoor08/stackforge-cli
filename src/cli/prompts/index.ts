@@ -10,7 +10,7 @@ const displayNames: Record<string, string> = {
   nextjs: 'Next.js',
   vite: 'Vite',
   // Component library
-  none: 'None (Tailwind CSS only)',
+  none: 'None',
   shadcn: 'shadcn/ui',
   mui: 'Material UI',
   chakra: 'Chakra UI',
@@ -37,12 +37,49 @@ const displayNames: Record<string, string> = {
   rest: 'REST',
   trpc: 'tRPC',
   graphql: 'GraphQL',
-  // Features
-  email: 'Email (Resend)',
-  storage: 'File Storage (Cloudinary)',
-  payments: 'Payments (Stripe)',
-  analytics: 'Analytics (PostHog)',
-  'error-tracking': 'Error Tracking (Sentry)'
+  // Feature categories
+  email: 'Email',
+  storage: 'File Storage',
+  payments: 'Payments',
+  analytics: 'Analytics',
+  'error-tracking': 'Error Tracking',
+  // Email providers
+  resend: 'Resend',
+  sendgrid: 'SendGrid',
+  'aws-ses': 'Amazon SES',
+  mailgun: 'Mailgun',
+  nodemailer: 'Nodemailer',
+  mailersend: 'MailerSend',
+  // Storage providers
+  cloudinary: 'Cloudinary',
+  'aws-s3': 'AWS S3',
+  'cloudflare-r2': 'Cloudflare R2',
+  'vercel-blob': 'Vercel Blob',
+  'supabase-storage': 'Supabase Storage',
+  'firebase-storage': 'Firebase Storage',
+  'azure-blob': 'Azure Blob Storage',
+  gcs: 'Google Cloud Storage',
+  // Payment providers
+  stripe: 'Stripe',
+  paypal: 'PayPal',
+  razorpay: 'Razorpay',
+  // Analytics providers
+  posthog: 'PostHog',
+  ga4: 'Google Analytics (GA4)',
+  'vercel-analytics': 'Vercel Analytics',
+  segment: 'Segment',
+  // Error tracking providers
+  sentry: 'Sentry',
+  logrocket: 'LogRocket',
+  // AI Agents
+  claude: 'Claude (Anthropic)',
+  copilot: 'GitHub Copilot',
+  codex: 'OpenAI Codex',
+  gemini: 'Google Gemini',
+  cursor: 'Cursor',
+  codeium: 'Codeium',
+  windsurf: 'Windsurf',
+  tabnine: 'Tabnine'
 };
 
 function label(value: string): string {
@@ -66,25 +103,32 @@ export async function promptForConfig(input: {
 
   const detected = detectPackageManager(process.cwd());
 
-  const answers = await inquirer.prompt([
-    {
+  // Build prompts array conditionally
+  const prompts: any[] = [];
+
+  // Only prompt for project name if not provided
+  if (!input.projectName) {
+    prompts.push({
       type: 'input',
       name: 'projectName',
       message: 'Project name',
-      default: input.projectName || 'my-app'
-    },
-    {
-      type: 'list',
-      name: 'packageManager',
-      message: 'Package manager',
-      choices: [
-        { name: 'npm', value: 'npm' },
-        { name: 'pnpm', value: 'pnpm' },
-        { name: 'yarn', value: 'yarn' },
-        { name: 'bun', value: 'bun' }
-      ],
-      default: detected || 'npm'
-    },
+      default: 'my-app'
+    });
+  }
+
+  prompts.push({
+    type: 'list',
+    name: 'packageManager',
+    message: 'Package manager',
+    choices: [
+      { name: 'npm', value: 'npm' },
+      { name: 'pnpm', value: 'pnpm' },
+      { name: 'yarn', value: 'yarn' },
+      { name: 'bun', value: 'bun' }
+    ],
+    default: detected || 'npm'
+  });
+  prompts.push(
     {
       type: 'list',
       name: 'frontend',
@@ -133,22 +177,83 @@ export async function promptForConfig(input: {
     },
     {
       type: 'checkbox',
-      name: 'features',
-      message: 'Additional features',
-      choices: supported.features.map((v) => ({ name: label(v), value: v }))
+      name: 'featureCategories',
+      message: 'Additional features (select categories)',
+      choices: supported.featureCategories.map((v) => ({ name: label(v), value: v }))
+    },
+    {
+      type: 'checkbox',
+      name: 'aiAgents',
+      message: 'AI coding assistants (optional)',
+      choices: supported.agents.map((v) => ({ name: label(v), value: v }))
     }
-  ]);
+  );
+
+  const answers = await inquirer.prompt(prompts);
+
+  // Follow-up prompts for each selected feature category
+  const featureProviders: any = {};
+
+  if (answers.featureCategories?.includes('email')) {
+    const { emailProvider } = await inquirer.prompt([{
+      type: 'list',
+      name: 'emailProvider',
+      message: 'Email provider',
+      choices: supported.email.map((v) => ({ name: label(v), value: v }))
+    }]);
+    featureProviders.email = emailProvider;
+  }
+
+  if (answers.featureCategories?.includes('storage')) {
+    const { storageProvider } = await inquirer.prompt([{
+      type: 'list',
+      name: 'storageProvider',
+      message: 'File Storage provider',
+      choices: supported.storage.map((v) => ({ name: label(v), value: v }))
+    }]);
+    featureProviders.storage = storageProvider;
+  }
+
+  if (answers.featureCategories?.includes('payments')) {
+    const { paymentProvider } = await inquirer.prompt([{
+      type: 'list',
+      name: 'paymentProvider',
+      message: 'Payment provider',
+      choices: supported.payments.map((v) => ({ name: label(v), value: v }))
+    }]);
+    featureProviders.payments = paymentProvider;
+  }
+
+  if (answers.featureCategories?.includes('analytics')) {
+    const { analyticsProvider } = await inquirer.prompt([{
+      type: 'list',
+      name: 'analyticsProvider',
+      message: 'Analytics provider',
+      choices: supported.analytics.map((v) => ({ name: label(v), value: v }))
+    }]);
+    featureProviders.analytics = analyticsProvider;
+  }
+
+  if (answers.featureCategories?.includes('error-tracking')) {
+    const { errorTrackingProvider } = await inquirer.prompt([{
+      type: 'list',
+      name: 'errorTrackingProvider',
+      message: 'Error Tracking provider',
+      choices: supported.errorTracking.map((v) => ({ name: label(v), value: v }))
+    }]);
+    featureProviders.errorTracking = errorTrackingProvider;
+  }
 
   const base: StackforgeConfig = {
-    projectName: answers.projectName,
+    projectName: input.projectName || answers.projectName,
     packageManager: answers.packageManager as PackageManager,
     frontend: { type: answers.frontend, language: answers.language },
     ui: { library: answers.uiLibrary },
     database: { provider: answers.databaseProvider, orm: answers.orm },
     auth: { provider: answers.authProvider },
     api: { type: answers.apiType },
-    features: answers.features ?? [],
-    aiAgents: [],
+    features: featureProviders,
+    aiAgents: answers.aiAgents ?? [],
     preset: input.preset
   };
 

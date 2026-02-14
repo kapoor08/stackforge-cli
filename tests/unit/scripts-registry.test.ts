@@ -12,7 +12,7 @@ test('collectScripts adds db scripts for drizzle', () => {
     database: { provider: 'postgres', orm: 'drizzle' },
     auth: { provider: 'none' },
     api: { type: 'none' },
-    features: [],
+    features: {},
     aiAgents: []
   };
 

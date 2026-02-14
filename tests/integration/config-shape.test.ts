@@ -11,11 +11,11 @@ test('config shape supports required fields', () => {
     database: { provider: 'sqlite', orm: 'prisma' },
     auth: { provider: 'none' },
     api: { type: 'rest' },
-    features: ['email'],
+    features: { email: 'resend' },
     aiAgents: ['claude']
   };
 
   assert.equal(config.frontend.type, 'vite');
   assert.equal(config.database.orm, 'prisma');
-  assert.ok(Array.isArray(config.features));
+  assert.equal(config.features.email, 'resend');
 });

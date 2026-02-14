@@ -1,5 +1,19 @@
 export type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
 
+export type EmailProvider = 'resend' | 'sendgrid' | 'aws-ses' | 'mailgun' | 'nodemailer' | 'mailersend';
+export type StorageProvider = 'cloudinary' | 'aws-s3' | 'cloudflare-r2' | 'vercel-blob' | 'supabase-storage' | 'firebase-storage' | 'azure-blob' | 'gcs';
+export type PaymentProvider = 'stripe' | 'paypal' | 'razorpay';
+export type AnalyticsProvider = 'posthog' | 'ga4' | 'vercel-analytics' | 'segment';
+export type ErrorTrackingProvider = 'sentry' | 'logrocket';
+
+export interface Features {
+  email?: EmailProvider;
+  storage?: StorageProvider;
+  payments?: PaymentProvider;
+  analytics?: AnalyticsProvider;
+  errorTracking?: ErrorTrackingProvider;
+}
+
 export interface StackforgeConfig {
   projectName: string;
   packageManager: PackageManager;
@@ -11,7 +25,7 @@ export interface StackforgeConfig {
   };
   auth: { provider: 'clerk' | 'nextauth' | 'better-auth' | 'supabase' | 'none' };
   api: { type: 'trpc' | 'graphql' | 'rest' | 'none' };
-  features: string[];
+  features: Features;
   aiAgents: string[];
   preset?: string;
 }

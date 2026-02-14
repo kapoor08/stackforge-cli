@@ -15,7 +15,7 @@ test('generateApiFiles creates rest route and client', async () => {
     database: { provider: 'postgres', orm: 'drizzle' },
     auth: { provider: 'none' },
     api: { type: 'rest' },
-    features: [],
+    features: {},
     aiAgents: []
   };
 

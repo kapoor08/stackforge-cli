@@ -24,7 +24,7 @@ export function validateCompatibility(config: StackforgeConfig): void {
     }
   }
 
-  if (config.features.includes('error-tracking') && config.frontend.type !== 'nextjs') {
+  if (config.features.errorTracking === 'sentry' && config.frontend.type !== 'nextjs') {
     throw new Error('Error tracking (Sentry) requires Next.js.');
   }
 }

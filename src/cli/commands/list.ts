@@ -16,7 +16,11 @@ export const listCommand = new Command('list')
         logger.info(`orm: ${supported.orm.join(', ')}`);
         logger.info(`auth: ${supported.auth.join(', ')}`);
         logger.info(`api: ${supported.api.join(', ')}`);
-        logger.info(`features: ${supported.features.join(', ')}`);
+        logger.info(`email: ${supported.email.join(', ')}`);
+        logger.info(`storage: ${supported.storage.join(', ')}`);
+        logger.info(`payments: ${supported.payments.join(', ')}`);
+        logger.info(`analytics: ${supported.analytics.join(', ')}`);
+        logger.info(`error-tracking: ${supported.errorTracking.join(', ')}`);
         return;
       }
 
@@ -27,7 +31,13 @@ export const listCommand = new Command('list')
         logger.info(`database: ${config.database.provider}${config.database.orm ? ' (' + config.database.orm + ')' : ''}`);
         logger.info(`auth: ${config.auth.provider}`);
         logger.info(`api: ${config.api.type}`);
-        logger.info(`features: ${config.features.length ? config.features.join(', ') : 'none'}`);
+        const features = [];
+        if (config.features.email) features.push(`email: ${config.features.email}`);
+        if (config.features.storage) features.push(`storage: ${config.features.storage}`);
+        if (config.features.payments) features.push(`payments: ${config.features.payments}`);
+        if (config.features.analytics) features.push(`analytics: ${config.features.analytics}`);
+        if (config.features.errorTracking) features.push(`error-tracking: ${config.features.errorTracking}`);
+        logger.info(`features: ${features.length ? features.join(', ') : 'none'}`);
         return;
       }
 
@@ -48,7 +58,13 @@ export const listCommand = new Command('list')
           logger.info(`api: ${config.api.type}`);
           break;
         case 'features':
-          logger.info(`features: ${config.features.length ? config.features.join(', ') : 'none'}`);
+          const features = [];
+          if (config.features.email) features.push(`email: ${config.features.email}`);
+          if (config.features.storage) features.push(`storage: ${config.features.storage}`);
+          if (config.features.payments) features.push(`payments: ${config.features.payments}`);
+          if (config.features.analytics) features.push(`analytics: ${config.features.analytics}`);
+          if (config.features.errorTracking) features.push(`error-tracking: ${config.features.errorTracking}`);
+          logger.info(`features: ${features.length ? features.join(', ') : 'none'}`);
           break;
         default:
           logger.error(`Unknown category: ${options.category}`);

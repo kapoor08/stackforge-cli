@@ -16,7 +16,7 @@ test('generateDatabaseFiles creates prisma files', async () => {
     database: { provider: 'postgres', orm: 'prisma' },
     auth: { provider: 'none' },
     api: { type: 'none' },
-    features: [],
+    features: {},
     aiAgents: []
   };
 

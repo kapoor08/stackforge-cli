@@ -16,7 +16,7 @@ test('rest server responds on /api/hello', async (t) => {
     database: { provider: 'none' },
     auth: { provider: 'none' },
     api: { type: 'rest' },
-    features: [],
+    features: {},
     aiAgents: []
   };
 
