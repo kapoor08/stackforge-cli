@@ -1,5 +1,11 @@
 # create-stackforge
 
+## 0.4.2
+
+### Patch Changes
+
+- new tools addition
+
 ## 0.4.1
 
 ### Patch Changes
